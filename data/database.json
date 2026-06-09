@@ -1,0 +1,70 @@
+{
+  "bookings": [
+    {
+      "id": "b-1",
+      "type": "consulting",
+      "name": "Emmanuel Terngu",
+      "email": "ace_vets@yahoo.com",
+      "phone": "08038986150",
+      "category": "Productivity Improvement",
+      "details": "Experiencing high broiler mortality rates in the first 2 weeks. Need advice on brooding temperature and bio-security protocols.",
+      "date": "2026-06-10",
+      "status": "Pending",
+      "createdAt": "2026-06-05T08:23:40.744Z"
+    },
+    {
+      "id": "b-2",
+      "type": "training",
+      "name": "Aisha Bello",
+      "email": "aisha.bello@example.com",
+      "phone": "+234 803 111 2222",
+      "category": "Poultry Farming",
+      "details": "No previous experience. Looking to set up a small-scale layers farm (approx. 200 birds) in Kaduna State.",
+      "date": "2026-06-14",
+      "status": "Approved",
+      "createdAt": "2026-06-05T08:23:40.745Z"
+    },
+    {
+      "id": "b-3",
+      "type": "consulting",
+      "name": "Kenneth Okafor",
+      "email": "kenneth.o@example.com",
+      "phone": "+234 809 999 8888",
+      "category": "Animal Nutrition Advisory",
+      "details": "Need a custom feed formulation for pig growers using local ingredients (PKC, maize offal, soya) to reduce feeding costs.",
+      "date": "2026-06-08",
+      "status": "Approved",
+      "createdAt": "2026-06-05T08:23:40.745Z"
+    }
+  ],
+  "formulations": [
+    {
+      "id": "f-1",
+      "name": "Standard Chicken Broiler Starter Formulation",
+      "targetCP": 22,
+      "ingredient1Name": "Yellow Maize",
+      "ingredient1CP": 9,
+      "ingredient1Parts": 22,
+      "ingredient1Percent": 62.86,
+      "ingredient2Name": "Soybean Meal (Concentrate)",
+      "ingredient2CP": 44,
+      "ingredient2Parts": 13,
+      "ingredient2Percent": 37.14,
+      "createdAt": "2026-06-05T08:23:40.745Z"
+    },
+    {
+      "id": "f-2",
+      "name": "Standard Layers Mash Formulation",
+      "targetCP": 16.5,
+      "ingredient1Name": "White Corn",
+      "ingredient1CP": 8.8,
+      "ingredient1Parts": 25.5,
+      "ingredient1Percent": 72.86,
+      "ingredient2Name": "High-Protein Fishmeal",
+      "ingredient2CP": 62,
+      "ingredient2Parts": 7.7,
+      "ingredient2Percent": 27.14,
+      "createdAt": "2026-06-05T08:23:40.745Z"
+    }
+  ]
+}
