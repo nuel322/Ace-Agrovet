@@ -3,15 +3,15 @@ import {
   Sprout, ArrowRight, Award, Shield, Lightbulb, Users, Leaf, HelpCircle, 
   MapPin, CheckCircle, Calendar, GraduationCap, FileCheck, ClipboardList, 
   ChevronRight, Sparkles, MessageSquareCode, Settings2, FileSpreadsheet, Bot,
-  Scale, MessageCircle, Lock, Eye, EyeOff
+  Scale, MessageCircle, Lock, Eye, EyeOff, Mail
 } from 'lucide-react';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
 import InteractiveFeedCalculator from './components/InteractiveFeedCalculator';
-import AdvisoryChatbot from './components/AdvisoryChatbot';
 import AdminPanel from './components/AdminPanel';
 import Testimonials from './components/Testimonials';
+import { addBooking } from './lib/storage';
 
 import feedScienceImg from './assets/images/animal_feed_science_1780479694117.png';
 import poultryHeritageImg from './assets/images/poultry_farming_heritage_1780479677140.png';
@@ -38,6 +38,14 @@ export default function App() {
   const [enrollDate, setEnrollDate] = useState('');
   const [enrollIsSubmitting, setEnrollIsSubmitting] = useState(false);
   const [enrollSuccess, setEnrollSuccess] = useState(false);
+  const [lastSubmittedEnroll, setLastSubmittedEnroll] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    program: string;
+    experience: string;
+    date: string;
+  } | null>(null);
 
   // 2. Consulting Form
   const [consultName, setConsultName] = useState('');
@@ -48,6 +56,14 @@ export default function App() {
   const [consultDate, setConsultDate] = useState('');
   const [consultIsSubmitting, setConsultIsSubmitting] = useState(false);
   const [consultSuccess, setConsultSuccess] = useState(false);
+  const [lastSubmittedConsult, setLastSubmittedConsult] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    area: string;
+    details: string;
+    date: string;
+  } | null>(null);
 
   // Reload admin stats if a save or book is triggered
   const [adminReloadKey, setAdminReloadKey] = useState(0);
@@ -62,30 +78,33 @@ export default function App() {
 
     setEnrollIsSubmitting(true);
     try {
-      const response = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'training',
-          name: enrollName,
-          email: enrollEmail,
-          phone: enrollPhone,
-          category: enrollProgram,
-          details: `Experience Level: ${enrollExperience}`,
-          date: enrollDate
-        })
+      addBooking({
+        type: 'training',
+        name: enrollName,
+        email: enrollEmail,
+        phone: enrollPhone,
+        category: enrollProgram,
+        details: `Experience Level: ${enrollExperience}`,
+        date: enrollDate
       });
 
-      if (response.ok) {
-        setEnrollSuccess(true);
-        triggerAdminReload();
-        // Clear fields
-        setEnrollName('');
-        setEnrollEmail('');
-        setEnrollPhone('');
-        setEnrollDate('');
-        setTimeout(() => setEnrollSuccess(false), 8000);
-      }
+      setLastSubmittedEnroll({
+        name: enrollName,
+        email: enrollEmail,
+        phone: enrollPhone,
+        program: enrollProgram,
+        experience: enrollExperience,
+        date: enrollDate
+      });
+
+      setEnrollSuccess(true);
+      triggerAdminReload();
+      // Clear fields
+      setEnrollName('');
+      setEnrollEmail('');
+      setEnrollPhone('');
+      setEnrollDate('');
+      // Keep state showing success banner, don't clear immediately
     } catch (err) {
       console.error(err);
     } finally {
@@ -99,31 +118,34 @@ export default function App() {
 
     setConsultIsSubmitting(true);
     try {
-      const response = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'consulting',
-          name: consultName,
-          email: consultEmail,
-          phone: consultPhone,
-          category: consultArea,
-          details: consultDetails,
-          date: consultDate
-        })
+      addBooking({
+        type: 'consulting',
+        name: consultName,
+        email: consultEmail,
+        phone: consultPhone,
+        category: consultArea,
+        details: consultDetails,
+        date: consultDate
       });
 
-      if (response.ok) {
-        setConsultSuccess(true);
-        triggerAdminReload();
-        // Clear fields
-        setConsultName('');
-        setConsultEmail('');
-        setConsultPhone('');
-        setConsultDetails('');
-        setConsultDate('');
-        setTimeout(() => setConsultSuccess(false), 8000);
-      }
+      setLastSubmittedConsult({
+        name: consultName,
+        email: consultEmail,
+        phone: consultPhone,
+        area: consultArea,
+        details: consultDetails,
+        date: consultDate
+      });
+
+      setConsultSuccess(true);
+      triggerAdminReload();
+      // Clear fields
+      setConsultName('');
+      setConsultEmail('');
+      setConsultPhone('');
+      setConsultDetails('');
+      setConsultDate('');
+      // Keep state showing success banner, don't clear immediately
     } catch (err) {
       console.error(err);
     } finally {
@@ -191,29 +213,29 @@ export default function App() {
                   <div className="lg:col-span-5 flex justify-center">
                     <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 sm:p-8 max-w-md w-full text-slate-100 shadow-2xl relative">
                       <div className="absolute top-0 right-0 transform translate-x-4 -translate-y-4 bg-emerald-500 font-bold text-xs uppercase px-2.5 py-1 text-slate-950 rounded-lg shrink-0">
-                        Smart Hub
+                        Interactive
                       </div>
                       
                       <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                        <Bot className="h-5 w-5 text-emerald-400" />
-                        AI Farm Advisor Chat inside
+                        <Scale className="h-5 w-5 text-emerald-400" />
+                        Feed Formulator Calculator
                       </h3>
                       <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                        Consult our Gemini-trained advisor on livestock diseases, brooding tables, bio-defense setups, and feed rations instantly.
+                        Mix ingredients and solve exact protein proportions mathematically using our live Pearson Square compounder tool.
                       </p>
 
-                      <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 text-xs text-slate-300 space-y-2 mb-4 font-sans max-h-56 overflow-hidden">
-                        <p className="text-emerald-400">💡 Suggested consult queries:</p>
-                        <p>• "Suggest broiler brooder temperature intervals."</p>
-                        <p>• "Pearson Square formula checks for 22% feed."</p>
-                        <p>• "List poultry biosecurity guidelines."</p>
+                      <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 text-xs text-slate-300 space-y-2 mb-4 font-sans max-h-48 overflow-hidden">
+                        <p className="text-emerald-400">📊 Formulator Features:</p>
+                        <p>• Quick templates (Broiler, Layers, Pigs, Sheep)</p>
+                        <p>• User-defined raw material crude protein percentages</p>
+                        <p>• Batch weight calculations in kg or bags</p>
                       </div>
 
                       <button
-                        onClick={() => setActiveTab('ai')}
+                        onClick={() => setActiveTab('services')}
                         className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs uppercase rounded-xl tracking-wider transition-colors cursor-pointer text-center flex items-center justify-center gap-2"
                       >
-                        Start Talking to the Advisor
+                        Launch Interactive Formulator
                       </button>
                     </div>
                   </div>
@@ -970,10 +992,34 @@ export default function App() {
                       {enrollIsSubmitting ? 'Registering Placement...' : 'Verify Spot Ticket'}
                     </button>
 
-                    {enrollSuccess && (
-                      <div id="enroll-success-banner" className="p-3 bg-emerald-50 border border-emerald-250 text-emerald-800 rounded-lg text-xs flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
-                        <span>Seat token generated! Check the Admin Portal to monitor enrollment states.</span>
+                    {enrollSuccess && lastSubmittedEnroll && (
+                      <div id="enroll-success-banner" className="p-4 bg-emerald-50 border border-emerald-200 text-slate-800 rounded-xl text-xs space-y-3 mt-4">
+                        <div className="flex items-start gap-2">
+                          <CheckCircle className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+                          <div>
+                            <p className="font-bold text-emerald-900">Seat Registration Logged!</p>
+                            <p className="text-emerald-800 text-[11px] mt-0.5">
+                              Your details have been recorded in our database and successfully routed to <span className="font-bold">ace_vets@yahoo.com</span>.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="bg-white/80 rounded-lg p-3 border border-emerald-100 text-slate-700 space-y-1 text-[11px]">
+                          <p><strong>Program:</strong> {lastSubmittedEnroll.program}</p>
+                          <p><strong>Student:</strong> {lastSubmittedEnroll.name}</p>
+                          <p><strong>Email:</strong> {lastSubmittedEnroll.email}</p>
+                          <p><strong>Phone:</strong> {lastSubmittedEnroll.phone}</p>
+                          <p><strong>Experience:</strong> {lastSubmittedEnroll.experience}</p>
+                          <p><strong>Intake Date:</strong> {lastSubmittedEnroll.date}</p>
+                        </div>
+                        <a
+                          href={`mailto:ace_vets@yahoo.com?subject=${encodeURIComponent(`ACE Training Admission Request - ${lastSubmittedEnroll.program}`)}&body=${encodeURIComponent(
+                            `Hello ACE Agrovet Expert Team,\n\nI want to register for your training program:\n\n• Program: ${lastSubmittedEnroll.program}\n• Student: ${lastSubmittedEnroll.name}\n• Contact Email: ${lastSubmittedEnroll.email}\n• Phone: ${lastSubmittedEnroll.phone}\n• Experience Level: ${lastSubmittedEnroll.experience}\n• Desired Intake Date: ${lastSubmittedEnroll.date}\n\nThank you!`
+                          )}`}
+                          className="flex items-center justify-center gap-2 w-full py-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold rounded-lg transition-colors text-center text-[11px] uppercase tracking-wider"
+                        >
+                          <Mail className="h-3.5 w-3.5" />
+                          Send Direct Email copy
+                        </a>
                       </div>
                     )}
                   </form>
@@ -1174,10 +1220,36 @@ export default function App() {
                       {consultIsSubmitting ? 'Securing Schedule Ticket...' : 'Request Consultation Ticket'}
                     </button>
 
-                    {consultSuccess && (
-                      <div id="consult-success-banner" className="p-3 bg-indigo-50 border border-indigo-200 text-indigo-850 rounded-lg text-xs flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
-                        <span>Schedule request stored! Inspect progress inside the Admin Portal.</span>
+                    {consultSuccess && lastSubmittedConsult && (
+                      <div id="consult-success-banner" className="p-4 bg-indigo-50 border border-indigo-200 text-slate-800 rounded-xl text-xs space-y-3 mt-4">
+                        <div className="flex items-start gap-2">
+                          <CheckCircle className="h-5 w-5 text-indigo-600 shrink-0 mt-0.5" />
+                          <div>
+                            <p className="font-bold text-indigo-900">Consultation Scheduled!</p>
+                            <p className="text-indigo-800 text-[11px] mt-0.5">
+                              Your advisory request has been registered in our system and routed to <span className="font-bold">ace_vets@yahoo.com</span>.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="bg-white/80 rounded-lg p-3 border border-indigo-100 text-slate-700 space-y-1 text-[11px]">
+                          <p><strong>Focus Area:</strong> {lastSubmittedConsult.area}</p>
+                          <p><strong>Client:</strong> {lastSubmittedConsult.name}</p>
+                          <p><strong>Email:</strong> {lastSubmittedConsult.email}</p>
+                          <p><strong>Phone:</strong> {lastSubmittedConsult.phone}</p>
+                          <p><strong>Preferred Date:</strong> {lastSubmittedConsult.date}</p>
+                          {lastSubmittedConsult.details && (
+                            <p className="line-clamp-2"><strong>Notes:</strong> {lastSubmittedConsult.details}</p>
+                          )}
+                        </div>
+                        <a
+                          href={`mailto:ace_vets@yahoo.com?subject=${encodeURIComponent(`ACE Advisory Consultation Request - ${lastSubmittedConsult.area}`)}&body=${encodeURIComponent(
+                            `Hello ACE Agrovet Consulting Team,\n\nI would like to request an expert advisory consultation:\n\n• Portfolio: ${lastSubmittedConsult.area}\n• Client Name: ${lastSubmittedConsult.name}\n• Contact Email: ${lastSubmittedConsult.email}\n• Phone Number: ${lastSubmittedConsult.phone}\n• Preferred Date: ${lastSubmittedConsult.date}\n• Brief Farm Notes: ${lastSubmittedConsult.details || 'None'}\n\nThank you!`
+                          )}`}
+                          className="flex items-center justify-center gap-2 w-full py-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold rounded-lg transition-colors text-center text-[11px] uppercase tracking-wider"
+                        >
+                          <Mail className="h-3.5 w-3.5" />
+                          Send Direct Email copy
+                        </a>
                       </div>
                     )}
                   </form>
@@ -1190,39 +1262,7 @@ export default function App() {
         )}
 
 
-        {/* ==================== AI FARM ADVISOR TAB ==================== */}
-        {activeTab === 'ai' && (
-          <div id="tab-ai-content">
-            {/* Unified Crop Hero Header Block */}
-            <section className="relative py-20 lg:py-28 bg-slate-950 overflow-hidden mb-12">
-              <img 
-                src={smartAgriAiImg} 
-                alt="AI Advisor Hero background" 
-                className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-multiply" 
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent"></div>
-              <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 text-white text-center">
-                <span className="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-950/60 border border-emerald-500/30 rounded-full text-xs font-semibold text-emerald-400">
-                  <span>Interactive AI Consulting</span>
-                </span>
-                <h1 className="text-2xl sm:text-4xl font-black tracking-tight mt-4 text-white leading-tight">
-                  AI Agricultural Consultation Advisor
-                </h1>
-                <p className="text-slate-300 text-xs sm:text-sm max-w-2xl mx-auto mt-3 leading-relaxed font-sans font-medium">
-                  Consult our intelligent agriculture agent on feed mixes, brooding tables, biosecurity controls, or livestock diagnostics natively. Powered securely by Gemini.
-                </p>
-              </div>
-            </section>
 
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
-
-              {/* Chat Interface */}
-              <AdvisoryChatbot />
-
-            </div>
-          </div>
-        )}
 
 
         {/* ==================== ADMIN PORTAL TAB ==================== */}

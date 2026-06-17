@@ -1,6 +1,6 @@
 {
   "name": "ACE Agrovet Consults",
-  "description": "Modern full-stack agricultural consulting portal featuring custom livestock feed formulators, training enrollment, scheduling, and an AI Farm Advisor.",
+  "description": "Modern React consulting portal featuring interactive livestock feed formulators, training enrollments, expert advisory bookings, and localized database management.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

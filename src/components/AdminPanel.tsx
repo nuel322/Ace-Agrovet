@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Settings2, BookOpen, Calculator, Trash2, CheckCircle2, Loader2, RefreshCw, Eye, Calendar, Phone, Mail, HelpCircle, Download } from 'lucide-react';
 import { Booking, FeedFormulation } from '../types';
+import { getBookings, updateBookingStatus, deleteBooking, getFormulations, deleteFormulation, getDatabaseExportSQL } from '../lib/storage';
 
 export default function AdminPanel() {
   const [subTab, setSubTab] = useState<'bookings' | 'formulations'>('bookings');
@@ -18,15 +19,10 @@ export default function AdminPanel() {
   const fetchData = async () => {
     setRefreshing(true);
     try {
-      const headers = { 'x-admin-password': 'Aceagrovet1234' };
-      const bRes = await fetch('/api/bookings', { headers });
-      const fRes = await fetch('/api/formulations', { headers });
-      if (bRes.ok && fRes.ok) {
-        const bData = await bRes.json();
-        const fData = await fRes.json();
-        setBookings(bData);
-        setFormulations(fData);
-      }
+      const bData = getBookings();
+      const fData = getFormulations();
+      setBookings(bData);
+      setFormulations(fData);
     } catch (error) {
       console.error("Error loaded administrative data", error);
     } finally {
@@ -42,16 +38,8 @@ export default function AdminPanel() {
   const handleUpdateStatus = async (id: string, newStatus: Booking['status']) => {
     setActioningId(id);
     try {
-      const response = await fetch(`/api/bookings/${id}`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-admin-password': 'Aceagrovet1234'
-        },
-        body: JSON.stringify({ status: newStatus })
-      });
-      if (response.ok) {
-        // optimistically update locally
+      const updated = updateBookingStatus(id, newStatus);
+      if (updated) {
         setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
         if (selectedBooking?.id === id) {
           setSelectedBooking(prev => prev ? { ...prev, status: newStatus } : null);
@@ -69,11 +57,8 @@ export default function AdminPanel() {
     if (!confirm('Are you sure you want to delete this enrollment/consultation record?')) return;
     setActioningId(id);
     try {
-      const response = await fetch(`/api/bookings/${id}`, { 
-        method: 'DELETE',
-        headers: { 'x-admin-password': 'Aceagrovet1234' }
-      });
-      if (response.ok) {
+      const success = deleteBooking(id);
+      if (success) {
         setBookings(prev => prev.filter(b => b.id !== id));
         if (selectedBooking?.id === id) setSelectedBooking(null);
       }
@@ -88,11 +73,8 @@ export default function AdminPanel() {
     if (!confirm('Are you sure you want to permanently delete this nutrition formulation guide?')) return;
     setActioningId(id);
     try {
-      const response = await fetch(`/api/formulations/${id}`, { 
-        method: 'DELETE',
-        headers: { 'x-admin-password': 'Aceagrovet1234' }
-      });
-      if (response.ok) {
+      const success = deleteFormulation(id);
+      if (success) {
         setFormulations(prev => prev.filter(f => f.id !== id));
       }
     } catch (err) {
@@ -105,22 +87,16 @@ export default function AdminPanel() {
   const handleDownloadDatabase = async () => {
     setDownloadingDb(true);
     try {
-      const response = await fetch('/api/admin/export-db', {
-        headers: { 'x-admin-password': 'Aceagrovet1234' }
-      });
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `ace_agrovet_database_backup_${new Date().toISOString().split('T')[0]}.sql`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      } else {
-        alert('Could not download database SQL dump. Please try again.');
-      }
+      const sqlContent = getDatabaseExportSQL();
+      const blob = new Blob([sqlContent], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ace_agrovet_database_backup_${new Date().toISOString().split('T')[0]}.sql`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Download error:', err);
       alert('Error downloading database file.');

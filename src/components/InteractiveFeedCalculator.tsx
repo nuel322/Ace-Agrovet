@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Scale, RotateCcw, Save, Trash2, PlusCircle, CheckCircle, AlertTriangle, HelpCircle } from 'lucide-react';
 import { FeedFormulation } from '../types';
+import { addFormulation } from '../lib/storage';
 
 interface InteractiveFeedCalculatorProps {
   onSaveSuccess: () => void;
@@ -120,26 +121,18 @@ export default function InteractiveFeedCalculator({ onSaveSuccess }: Interactive
     
     setSaveStatus('saving');
     try {
-      const response = await fetch('/api/formulations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formName,
-          targetCP,
-          ingredient1Name: ing1Name,
-          ingredient1CP: ing1CP,
-          ingredient1Parts: parts1,
-          ingredient1Percent: percent1,
-          ingredient2Name: ing2Name,
-          ingredient2CP: ing2CP,
-          ingredient2Parts: parts2,
-          ingredient2Percent: percent2
-        })
+      addFormulation({
+        name: formName,
+        targetCP,
+        ingredient1Name: ing1Name,
+        ingredient1CP: ing1CP,
+        ingredient1Parts: parts1,
+        ingredient1Percent: percent1,
+        ingredient2Name: ing2Name,
+        ingredient2CP: ing2CP,
+        ingredient2Parts: parts2,
+        ingredient2Percent: percent2
       });
-      
-      if (!response.ok) {
-        throw new Error('Server returned error status');
-      }
       
       setSaveStatus('success');
       onSaveSuccess();

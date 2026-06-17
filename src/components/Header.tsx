@@ -15,7 +15,6 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
     { name: 'Our Services & Feed Formulator', id: 'services' },
     { name: 'Training Programs', id: 'training' },
     { name: 'Expert Consulting', id: 'consulting' },
-    { name: 'AI Farm Advisor', id: 'ai' },
   ];
 
   return (

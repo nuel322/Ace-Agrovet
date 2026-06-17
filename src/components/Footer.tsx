@@ -61,7 +61,6 @@ export default function Footer({ setActiveTab }: FooterProps) {
               <button onClick={() => setActiveTab('services')} className="block hover:text-white transition-colors cursor-pointer text-left">Feed Optimizer</button>
               <button onClick={() => setActiveTab('training')} className="block hover:text-white transition-colors cursor-pointer text-left">Training Programs</button>
               <button onClick={() => setActiveTab('consulting')} className="block hover:text-white transition-colors cursor-pointer text-left">Expert Advisory</button>
-              <button onClick={() => setActiveTab('ai')} className="block hover:text-white transition-colors/50 cursor-pointer text-left">AI Farm Helper</button>
             </div>
           </div>
 
