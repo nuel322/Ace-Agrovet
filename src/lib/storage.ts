@@ -1,6 +1,7 @@
 import { Booking, FeedFormulation } from '../types';
+import { supabaseService, isSupabaseConfigured } from './supabase';
 
-// Default Seed Data for Bookings
+// Default Seed Data for Bookings (Local Fallback)
 const DEFAULT_BOOKINGS: Booking[] = [
   {
     id: 'book-1',
@@ -40,7 +41,7 @@ const DEFAULT_BOOKINGS: Booking[] = [
   }
 ];
 
-// Default Seed Data for Feed Formulations
+// Default Seed Data for Feed Formulations (Local Fallback)
 const DEFAULT_FORMULATIONS: FeedFormulation[] = [
   {
     id: 'form-1',
@@ -72,8 +73,9 @@ const DEFAULT_FORMULATIONS: FeedFormulation[] = [
   }
 ];
 
-// Helper to initialize storage
+// Helper to initialize local storage fallback
 const initStorage = () => {
+  if (typeof window === 'undefined') return;
   if (!localStorage.getItem('ace_bookings')) {
     localStorage.setItem('ace_bookings', JSON.stringify(DEFAULT_BOOKINGS));
   }
@@ -82,7 +84,20 @@ const initStorage = () => {
   }
 };
 
-export const getBookings = (): Booking[] => {
+/**
+ * Get Bookings
+ * If Supabase is connected, fetch from Supabase. Otherwise, use localStorage.
+ */
+export const getBookings = async (): Promise<Booking[]> => {
+  if (isSupabaseConfigured) {
+    try {
+      return await supabaseService.getBookings();
+    } catch (err) {
+      console.warn('Supabase fetch failed, falling back to localStorage:', err);
+    }
+  }
+
+  // Fallback to LocalStorage
   initStorage();
   try {
     return JSON.parse(localStorage.getItem('ace_bookings') || '[]');
@@ -91,9 +106,22 @@ export const getBookings = (): Booking[] => {
   }
 };
 
-export const addBooking = (bookingData: Omit<Booking, 'id' | 'status' | 'createdAt'>): Booking => {
+/**
+ * Add Booking
+ * If Supabase is connected, save to Supabase. Otherwise, use localStorage.
+ */
+export const addBooking = async (bookingData: Omit<Booking, 'id' | 'status' | 'createdAt'>): Promise<Booking> => {
+  if (isSupabaseConfigured) {
+    try {
+      return await supabaseService.insertBooking(bookingData);
+    } catch (err) {
+      console.warn('Supabase save failed, falling back to localStorage:', err);
+    }
+  }
+
+  // Fallback to LocalStorage
   initStorage();
-  const bookings = getBookings();
+  const bookings = JSON.parse(localStorage.getItem('ace_bookings') || '[]');
   const newBooking: Booking = {
     ...bookingData,
     id: 'book-' + Math.random().toString(36).substr(2, 9),
@@ -105,10 +133,27 @@ export const addBooking = (bookingData: Omit<Booking, 'id' | 'status' | 'created
   return newBooking;
 };
 
-export const updateBookingStatus = (id: string, status: Booking['status']): Booking | null => {
+/**
+ * Update Booking Status
+ * If Supabase is connected, update on Supabase. Otherwise, use localStorage.
+ */
+export const updateBookingStatus = async (id: string, status: Booking['status']): Promise<Booking | null> => {
+  if (isSupabaseConfigured) {
+    try {
+      const success = await supabaseService.updateBookingStatus(id, status);
+      if (success) {
+        // Return a mock object representation to satisfy return type
+        return { id, status } as Booking;
+      }
+    } catch (err) {
+      console.warn('Supabase status update failed, shifting to localStorage:', err);
+    }
+  }
+
+  // Fallback to LocalStorage
   initStorage();
-  const bookings = getBookings();
-  const idx = bookings.findIndex(b => b.id === id);
+  const bookings = JSON.parse(localStorage.getItem('ace_bookings') || '[]');
+  const idx = bookings.findIndex((b: Booking) => b.id === id);
   if (idx !== -1) {
     bookings[idx].status = status;
     localStorage.setItem('ace_bookings', JSON.stringify(bookings));
@@ -117,10 +162,23 @@ export const updateBookingStatus = (id: string, status: Booking['status']): Book
   return null;
 };
 
-export const deleteBooking = (id: string): boolean => {
+/**
+ * Delete Booking
+ * If Supabase is connected, delete from Supabase. Otherwise, use localStorage.
+ */
+export const deleteBooking = async (id: string): Promise<boolean> => {
+  if (isSupabaseConfigured) {
+    try {
+      return await supabaseService.deleteBooking(id);
+    } catch (err) {
+      console.warn('Supabase deletion failed, shifting to localStorage:', err);
+    }
+  }
+
+  // Fallback to LocalStorage
   initStorage();
-  const bookings = getBookings();
-  const filtered = bookings.filter(b => b.id !== id);
+  const bookings = JSON.parse(localStorage.getItem('ace_bookings') || '[]');
+  const filtered = bookings.filter((b: Booking) => b.id !== id);
   if (filtered.length !== bookings.length) {
     localStorage.setItem('ace_bookings', JSON.stringify(filtered));
     return true;
@@ -128,7 +186,20 @@ export const deleteBooking = (id: string): boolean => {
   return false;
 };
 
-export const getFormulations = (): FeedFormulation[] => {
+/**
+ * Get Formulations
+ * If Supabase is connected, fetch from Supabase. Otherwise, use localStorage.
+ */
+export const getFormulations = async (): Promise<FeedFormulation[]> => {
+  if (isSupabaseConfigured) {
+    try {
+      return await supabaseService.getFormulations();
+    } catch (err) {
+      console.warn('Supabase formulations fetch failed, falling back to localStorage:', err);
+    }
+  }
+
+  // Fallback to LocalStorage
   initStorage();
   try {
     return JSON.parse(localStorage.getItem('ace_formulations') || '[]');
@@ -137,9 +208,22 @@ export const getFormulations = (): FeedFormulation[] => {
   }
 };
 
-export const addFormulation = (formulationData: Omit<FeedFormulation, 'id' | 'createdAt'>): FeedFormulation => {
+/**
+ * Add Formulation
+ * If Supabase is connected, save to Supabase. Otherwise, use localStorage.
+ */
+export const addFormulation = async (formulationData: Omit<FeedFormulation, 'id' | 'createdAt'>): Promise<FeedFormulation> => {
+  if (isSupabaseConfigured) {
+    try {
+      return await supabaseService.insertFormulation(formulationData);
+    } catch (err) {
+      console.warn('Supabase formulation insert failed, shifting to localStorage:', err);
+    }
+  }
+
+  // Fallback to LocalStorage
   initStorage();
-  const formulations = getFormulations();
+  const formulations = JSON.parse(localStorage.getItem('ace_formulations') || '[]');
   const newFormulation: FeedFormulation = {
     ...formulationData,
     id: 'form-' + Math.random().toString(36).substr(2, 9),
@@ -150,10 +234,23 @@ export const addFormulation = (formulationData: Omit<FeedFormulation, 'id' | 'cr
   return newFormulation;
 };
 
-export const deleteFormulation = (id: string): boolean => {
+/**
+ * Delete Formulation
+ * If Supabase is connected, delete on Supabase. Otherwise, use localStorage.
+ */
+export const deleteFormulation = async (id: string): Promise<boolean> => {
+  if (isSupabaseConfigured) {
+    try {
+      return await supabaseService.deleteFormulation(id);
+    } catch (err) {
+      console.warn('Supabase formulation deletion failed, shifting to localStorage:', err);
+    }
+  }
+
+  // Fallback to LocalStorage
   initStorage();
-  const formulations = getFormulations();
-  const filtered = formulations.filter(f => f.id !== id);
+  const formulations = JSON.parse(localStorage.getItem('ace_formulations') || '[]');
+  const filtered = formulations.filter((f: FeedFormulation) => f.id !== id);
   if (filtered.length !== formulations.length) {
     localStorage.setItem('ace_formulations', JSON.stringify(filtered));
     return true;
@@ -161,13 +258,23 @@ export const deleteFormulation = (id: string): boolean => {
   return false;
 };
 
-// Returns a synthetic SQL file string representing standard insert queries
+/**
+ * Returns a SQL file representation dump (Synchronous helper)
+ */
 export const getDatabaseExportSQL = (): string => {
-  const bookings = getBookings();
-  const formulations = getFormulations();
+  // Try to retrieve localstorage representation
+  initStorage();
+  let bookings: Booking[] = [];
+  let formulations: FeedFormulation[] = [];
+  try {
+    bookings = JSON.parse(localStorage.getItem('ace_bookings') || '[]');
+    formulations = JSON.parse(localStorage.getItem('ace_formulations') || '[]');
+  } catch (e) {
+    // Keep empty arrays
+  }
   
-  let sql = `-- ACE Agrovet Consults Local Database Schema & Backup Dump\n`;
-  sql += `-- Export Date: ${new Date().toISOString()}\n\n`;
+  let sql = `-- ACE Agrovet Consults - PostgreSQL Setup & Seed Dump\n`;
+  sql += `-- Exported At: ${new Date().toISOString()}\n\n`;
   
   sql += `CREATE TABLE IF NOT EXISTS bookings (\n`;
   sql += `  id VARCHAR(255) PRIMARY KEY,\n`;

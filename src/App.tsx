@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import InteractiveFeedCalculator from './components/InteractiveFeedCalculator';
 import AdminPanel from './components/AdminPanel';
 import Testimonials from './components/Testimonials';
+import ResourcesPanel from './components/ResourcesPanel';
 import { addBooking } from './lib/storage';
 
 import feedScienceImg from './assets/images/animal_feed_science_1780479694117.png';
@@ -78,7 +79,7 @@ export default function App() {
 
     setEnrollIsSubmitting(true);
     try {
-      addBooking({
+      await addBooking({
         type: 'training',
         name: enrollName,
         email: enrollEmail,
@@ -118,7 +119,7 @@ export default function App() {
 
     setConsultIsSubmitting(true);
     try {
-      addBooking({
+      await addBooking({
         type: 'consulting',
         name: consultName,
         email: consultEmail,
@@ -1264,6 +1265,13 @@ export default function App() {
 
 
 
+
+        {/* ==================== RESOURCES TAB ==================== */}
+        {activeTab === 'resources' && (
+          <div id="tab-resources-content" className="fade-in-section">
+            <ResourcesPanel />
+          </div>
+        )}
 
         {/* ==================== ADMIN PORTAL TAB ==================== */}
         {activeTab === 'admin' && (

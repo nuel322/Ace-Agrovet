@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Settings2, BookOpen, Calculator, Trash2, CheckCircle2, Loader2, RefreshCw, Eye, Calendar, Phone, Mail, HelpCircle, Download } from 'lucide-react';
 import { Booking, FeedFormulation } from '../types';
 import { getBookings, updateBookingStatus, deleteBooking, getFormulations, deleteFormulation, getDatabaseExportSQL } from '../lib/storage';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 export default function AdminPanel() {
   const [subTab, setSubTab] = useState<'bookings' | 'formulations'>('bookings');
@@ -19,8 +20,8 @@ export default function AdminPanel() {
   const fetchData = async () => {
     setRefreshing(true);
     try {
-      const bData = getBookings();
-      const fData = getFormulations();
+      const bData = await getBookings();
+      const fData = await getFormulations();
       setBookings(bData);
       setFormulations(fData);
     } catch (error) {
@@ -38,7 +39,7 @@ export default function AdminPanel() {
   const handleUpdateStatus = async (id: string, newStatus: Booking['status']) => {
     setActioningId(id);
     try {
-      const updated = updateBookingStatus(id, newStatus);
+      const updated = await updateBookingStatus(id, newStatus);
       if (updated) {
         setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
         if (selectedBooking?.id === id) {
@@ -57,7 +58,7 @@ export default function AdminPanel() {
     if (!confirm('Are you sure you want to delete this enrollment/consultation record?')) return;
     setActioningId(id);
     try {
-      const success = deleteBooking(id);
+      const success = await deleteBooking(id);
       if (success) {
         setBookings(prev => prev.filter(b => b.id !== id));
         if (selectedBooking?.id === id) setSelectedBooking(null);
@@ -73,7 +74,7 @@ export default function AdminPanel() {
     if (!confirm('Are you sure you want to permanently delete this nutrition formulation guide?')) return;
     setActioningId(id);
     try {
-      const success = deleteFormulation(id);
+      const success = await deleteFormulation(id);
       if (success) {
         setFormulations(prev => prev.filter(f => f.id !== id));
       }
@@ -117,6 +118,32 @@ export default function AdminPanel() {
           <p className="text-xs text-slate-400 leading-normal">
             Manage ACE AGROVET's consultation bookings and feed formulation recipes seamlessly.
           </p>
+
+          {/* Database Connection Status Indicator */}
+          <div className="mt-4 p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 flex items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                Database Engine
+              </span>
+              <p className="text-xs font-semibold text-white">
+                {isSupabaseConfigured ? 'Supabase cloud db' : 'local storage backup'}
+              </p>
+            </div>
+            {isSupabaseConfigured ? (
+              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[9px] font-bold text-emerald-400 uppercase tracking-widest">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                </span>
+                Active and Connected
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-950/60 border border-amber-500/30 text-[9px] font-bold text-amber-400 uppercase tracking-widest">
+                <span className="relative flex h-1.5 w-1.5 bg-amber-500 rounded-full"></span>
+                Fallback Active
+              </span>
+            )}
+          </div>
 
           <div className="mt-6 space-y-2">
             <button

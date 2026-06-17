@@ -121,7 +121,7 @@ export default function InteractiveFeedCalculator({ onSaveSuccess }: Interactive
     
     setSaveStatus('saving');
     try {
-      addFormulation({
+      await addFormulation({
         name: formName,
         targetCP,
         ingredient1Name: ing1Name,
