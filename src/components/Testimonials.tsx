@@ -23,63 +23,48 @@ interface Testimonial {
 const TESTIMONIALS_DATA: Testimonial[] = [
   {
     id: 1,
-    ownerName: "Chief Emmanuel Adebayo",
-    farmName: "Adebayo Broilers Venture",
-    location: "Ibadan, Nigeria",
-    enterpriseType: "Commercial Poultry & Broilers",
+    ownerName: "Mr. Mfon Ayara",
+    farmName: "Meayar Farms (MD)",
+    location: "Uyo, Akwa Ibom",
+    enterpriseType: "Commercial Pig Farming & Restructuring",
     avatarColor: "bg-emerald-600 text-white",
     rating: 5,
     metrics: [
-      { label: "Broiler Mortality", value: "1.8% (Down from 11.5%)" },
-      { label: "Feed Conversion Ratio", value: "1.48 (FCR Improved)" },
-      { label: "Feed formulation Saving", value: "25% cost reduction" }
+      { label: "Primary Growth Goal", value: "100kg Pig Weight at 6 Months" },
+      { label: "Restructuring Scope", value: "Feed & Genetics Audit" },
+      { label: "Key Infrastructure", value: "Creep Areas & Phased Feed Plans" }
     ],
-    storyQuote: "ACE Agrovet transformed our entire brooding setup. Their custom-calculated broiler feed matrices saved us 25% on raw materials while cutting bird depletion to virtually zero. Truly the finest consulting program we've encountered."
+    storyQuote: "The comprehensive pig farm audit conducted by Ace Agrovet Consults was a massive eye-opener for Meayar Farms. The consultant identified critical flaws in our operations, particularly our poor feed and genetic stock. Their tailored restructuring plan provided us with actionable solutions, from a phased feeding program to essential infrastructure upgrades like creep areas. We now have a clear path to achieving our goal of 100kg pigs at 6 months of age. I highly recommend their technical expertise to any farmer looking to achieve true profitability."
   },
   {
     id: 2,
-    ownerName: "Patricia Amadi",
-    farmName: "Amadi Agri-Ventures",
-    location: "Enugu, Nigeria",
-    enterpriseType: "Multi-tier Farm Startup",
+    ownerName: "Mr. Akaasar Kuraiyol",
+    farmName: "Farm Owner",
+    location: "Nasarawa",
+    enterpriseType: "Pig Farm Operation & Feeding Audit",
     avatarColor: "bg-sky-600 text-white",
     rating: 5,
     metrics: [
-      { label: "Startup Build Duration", value: "45 Days (Completed)" },
-      { label: "Biosecurity Compliance", value: "100% Inspected" },
-      { label: "First flock Yield Rate", value: "96.4%" }
+      { label: "Critical Identification", value: "Over-reliance on Maize Bran" },
+      { label: "Core Restructuring", value: "Biosecurity & Clinical Health" },
+      { label: "Strategic Pathway", value: "Balanced Feed & Record-keeping" }
     ],
-    storyQuote: "As a beginner, I was completely overwhelmed by housing construction and feed details. The consultants designed our layout from scratch, supervised the housing builds, and trained my staff. Today, we're operating a high-yielding, biologically secure farm with zero startup regret!"
+    storyQuote: "The farm audit conducted by Ace Agrovet Consults was an eye-opener for us. They quickly identified critical problems that were stunting our pigs' growth, such as our over-reliance on maize bran and a complete lack of routine health management. With their expert recommendations on balanced feed formulations, biosecurity measures, and proper record-keeping, we are finally on the right path to profitability."
   },
   {
     id: 3,
-    ownerName: "Grace Kiarie",
-    farmName: "Kiarie Organic Layers Co.",
-    location: "Nakuru, Kenya",
-    enterpriseType: "Layer Operations & Egg Logistics",
+    ownerName: "Halimat Dooyum Salifu",
+    farmName: "Owner, Ojel Farm",
+    location: "Abuja",
+    enterpriseType: "Precision Nutrition & Layer Operations",
     avatarColor: "bg-amber-600 text-white",
     rating: 5,
     metrics: [
-      { label: "Egg Laying Peak", value: "92% (Up from 74%)" },
-      { label: "Feed Waste Cut", value: "15kg per day saved" },
-      { label: "Average Egg Weight", value: "62.4g ( stabilized )" }
+      { label: "Laying Rate Peak", value: "+75% Projected (Up from 14%)" },
+      { label: "Milling Advantage", value: "Custom Milling Prescriptions" },
+      { label: "Financial Turnaround", value: "+N88,000 Projected Daily Profit" }
     ],
-    storyQuote: "The layer feed formulation training was exceptionally deep. By understanding crude protein, calcium-to-phosphorus indexes, and amino acid constraints through their systems, our egg sizes stabilized, lay weeks extended, and feed waste went down significantly."
-  },
-  {
-    id: 4,
-    ownerName: "Alhaji Musa Danjuma",
-    farmName: "Danjuma Dairy & Feedlots",
-    location: "Kaduna, Nigeria",
-    enterpriseType: "Beef Cattle & Feedlot Management",
-    avatarColor: "bg-indigo-600 text-white",
-    rating: 5,
-    metrics: [
-      { label: "Daily Weight Gain", value: "+1.65 kg (Up from 0.9kg)" },
-      { label: "Milling Expenses", value: "30% cheaper rations" },
-      { label: "Herd Health Index", value: "99.1% Disease-Free" }
-    ],
-    storyQuote: "ACE Agrovet set up our on-farm self-milling station. By sourcing local ingredients and using their software formulations, our bulls are gaining weight almost twice as fast, and our dry season feeding costs are completely under control."
+    storyQuote: "Our flock of layers was severely underperforming at just a 14% laying rate at 23 weeks when we sought Dr. Senen's expertise. We were bleeding money on expensive feed. The custom feed formulation provided to us completely shifted our production model. By milling our own feed using their prescribed mixture, we targeted a minimum 75% laying rate. This technical support turned an unsustainable loss into a projected additional daily profit of NGN 88,000. I highly recommend their precision nutrition services."
   }
 ];
 
@@ -200,7 +185,7 @@ export default function Testimonials() {
                     <Award className="h-4 w-4" />
                   </div>
                   <div>
-                    <h5 className="font-extrabold text-slate-900 text-sm">98.2% Client Renewal</h5>
+                    <h5 className="font-extrabold text-slate-900 text-sm">Over 90% Client Renewal</h5>
                     <p className="text-[10px] text-slate-400 font-sans">Sustained productivity advisory contracts</p>
                   </div>
                 </div>
@@ -222,9 +207,9 @@ export default function Testimonials() {
               <div className="absolute top-0 right-0 transform translate-x-4 -translate-y-4 bg-emerald-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded-md">
                 Certified
               </div>
-              <h4 className="text-xs font-black tracking-wider uppercase text-emerald-400">Biological Defense Program</h4>
+              <h4 className="text-xs font-black tracking-wider uppercase text-emerald-400">OUR BIOSECURITY PROGRAM</h4>
               <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                We safeguard active livestock ventures with modular isolation loops and strict sanitation guidelines.
+                We provide advisory and install modern and functional biosecurity systems that safeguard your investments while protecting the environment.
               </p>
             </div>
           </div>
@@ -258,7 +243,7 @@ export default function Testimonials() {
                       <div className="flex items-center gap-4 mb-4">
                         {/* Custom visual avatar placeholder */}
                         <div className={`h-12 w-12 rounded-full flex items-center justify-center font-black ${active.avatarColor} text-base shrink-0 shadow-inner`}>
-                          {active.ownerName.split(' ').filter(n => n && !n.includes("Chief") && !n.includes("Alhaji")).map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AM'}
+                          {active.ownerName.split(' ').filter(n => n && !n.includes("Chief") && !n.includes("Alhaji") && !n.includes("Mr.") && !n.includes("Dr.")).map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'AM'}
                         </div>
                         <div>
                           <h4 className="font-extrabold text-slate-900 text-base leading-tight">

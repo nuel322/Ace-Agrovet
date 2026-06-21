@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import InteractiveFeedCalculator from './components/InteractiveFeedCalculator';
 import AdminPanel from './components/AdminPanel';
 import Testimonials from './components/Testimonials';
+import GallerySection from './components/GallerySection';
 import ResourcesPanel from './components/ResourcesPanel';
 import { addBooking } from './lib/storage';
 
@@ -222,7 +223,7 @@ export default function App() {
                         Feed Formulator Calculator
                       </h3>
                       <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                        Mix ingredients and solve exact protein proportions mathematically using our live Pearson Square compounder tool.
+                        Mix multiple ingredients and solve exact compound feed protein proportions using our live Excel Feed Calculator.
                       </p>
 
                       <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 text-xs text-slate-300 space-y-2 mb-4 font-sans max-h-48 overflow-hidden">
@@ -386,7 +387,7 @@ export default function App() {
                       <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Nutrition Advisory</span>
                       <h4 className="font-bold text-slate-900 text-base mt-1 mb-3">Animal Nutrition & Feeding</h4>
                       <p className="text-xs text-slate-600 leading-relaxed font-sans mb-4">
-                        Proper feeding is essential for livestock health. We offer expert recommendations on feed formulation matrices, nutrition calendars, and custom Pearson Square feed mix calculations for multiple breeds.
+                        Proper feeding is essential for livestock health. We offer expert recommendations on feed formulation matrices, nutrition calendars, and custom Excel feed formulations for multiple breeds.
                       </p>
                     </div>
                     <button onClick={() => setActiveTab('services')} className="text-xs font-bold text-emerald-600 hover:text-emerald-800 flex items-center gap-1.5 pt-4 cursor-pointer mt-auto border-t border-slate-50">
@@ -460,6 +461,9 @@ export default function App() {
 
             {/* Interactive Feedback & Testimonial Carousel Section */}
             <Testimonials />
+
+            {/* Event & Consultancy Gallery Section */}
+            <GallerySection />
 
             {/* Bottom Call to Action */}
             <section id="home-cta" className="py-16 bg-slate-900 text-white text-center relative overflow-hidden border-t border-slate-800">
@@ -765,25 +769,25 @@ export default function App() {
                       <li>• Growth performance boost</li>
                       <li>• Feeding calendar design</li>
                       <li>• Local raw feed substitute</li>
-                      <li>• Pearson Square algorithms</li>
+                      <li>• Excel formulation sheets</li>
                       <li>• Breed specific nutrition</li>
                     </ul>
                   </div>
                   <a href="#feed-formulator-interactive" className="text-xs font-bold text-emerald-600 flex items-center gap-1.5 mt-auto pt-2 cursor-pointer">
-                    Go to Pearson Square formulator <ArrowRight className="h-4 w-4" />
+                    Go to Excel Feed Formulator <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
 
               </div>
 
-              {/* Hanger for Pearson Square Mixer Embed */}
+              {/* Hanger for Excel Feed Formulator Embed */}
               <div id="feed-formulator-interactive" className="pt-8 border-t border-slate-200">
                 <div className="mb-6 text-center max-w-2xl mx-auto">
                   <span className="px-3 py-1 bg-indigo-50 border border-indigo-200 text-indigo-700 text-[10px] font-extrabold uppercase rounded-full tracking-wider">
                     Interactive Feature
                   </span>
                   <p className="text-slate-550 text-xs mt-2 font-sans">
-                    Utilize our algebraic diagonal formulator below to calculate exact raw feeding ratios for your desired target proteins.
+                    Utilize our interactive Excel formulation spreadsheet below to calculate exact raw feeding ratios for your desired target proteins.
                   </p>
                 </div>
                 
@@ -896,7 +900,7 @@ export default function App() {
                 <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-250 shadow-md">
                   <h3 className="text-lg font-extrabold text-slate-950 mb-2">Book Training Session</h3>
                   <p className="text-xs text-slate-500 mb-6 font-sans">
-                    Complete the short registration below. Our academic consultants will follow up within 24 hours to secure your placement ticket.
+                    Complete the short registration below. Our consultants will follow up within 24 hours to secure your placement ticket.
                   </p>
 
                   <form id="training-enrollment-form" onSubmit={handleEnrollSubmit} className="space-y-4">

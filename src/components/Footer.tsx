@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sprout, Phone, Mail, MapPin, Award, CheckCircle } from 'lucide-react';
+import { Sprout, Phone, Mail, MapPin, Award, CheckCircle, Facebook, Linkedin } from 'lucide-react';
 
 interface FooterProps {
   setActiveTab: (tab: string) => void;
@@ -50,6 +50,29 @@ export default function Footer({ setActiveTab }: FooterProps) {
             <p className="text-xs leading-relaxed text-slate-400">
               A professional agricultural consulting agency. We equip individuals, smallholders, and deep-pocketed agribusiness investors with rigorous training, technical nutrition formulations, and biosecurity plans that generate high yields.
             </p>
+
+            <div className="flex items-center space-x-3 pt-2">
+              <a 
+                href="https://www.facebook.com/share/1DtckFd3Qs/?mibextid=wwXIfr" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-450 text-slate-400 hover:text-white transition-all duration-200"
+                title="Connect with us on Facebook"
+                aria-label="Connect with us on Facebook"
+              >
+                <Facebook className="h-4 w-4" />
+              </a>
+              <a 
+                href="https://www.linkedin.com/company/ace-agrovet-consults/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="p-2 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-450 text-slate-400 hover:text-white transition-all duration-200"
+                title="Follow us on LinkedIn"
+                aria-label="Follow us on LinkedIn"
+              >
+                <Linkedin className="h-4 w-4" />
+              </a>
+            </div>
           </div>
 
           {/* Quick Links Nav */}
@@ -71,7 +94,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
             <div className="space-y-2 text-xs">
               <div className="flex items-start gap-2 text-slate-400">
                 <MapPin className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>ACE Agrovet Corporate Offices, Agribusiness Plaza, Makurdi, Benue State, Nigeria.</span>
+                <span>No. 13 Gbagyi shopping mall, Jikwoyi, phase 2, before the market, Abuja</span>
               </div>
               <div className="flex items-center gap-2 text-slate-400">
                 <Phone className="h-4 w-4 text-emerald-500 shrink-0" />

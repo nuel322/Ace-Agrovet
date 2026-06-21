@@ -415,7 +415,7 @@ export default function ResourcesPanel() {
               <span className="p-1.5 bg-emerald-100 text-emerald-700 rounded-lg shrink-0">
                 <Printer className="h-5 w-5" />
               </span>
-              <h2 className="text-lg font-black text-slate-900 tracking-tight">Tailored Log Sheet PDF Instigator</h2>
+              <h2 className="text-lg font-black text-slate-900 tracking-tight">Tailored Farm Records Template</h2>
             </div>
             <p className="text-slate-500 text-xs leading-relaxed">
               Personalize any record-keeping document with your specific custom Farm Branding details and Flock ID before printing.
@@ -439,7 +439,7 @@ export default function ResourcesPanel() {
 
               <div>
                 <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                  Enforce Custom Farm Name
+                  Enter Farm Name
                 </label>
                 <input
                   type="text"
